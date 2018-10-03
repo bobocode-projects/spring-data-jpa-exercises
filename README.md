@@ -11,3 +11,4 @@ It is important to have a different type of activities, which purpose is improvi
 ***An exercise** is a predefined task that you continuously implement to improve a certain skill* :muscle:
 ##
 * [Hello JPA Repository](https://github.com/bobocode-projects/spring-data-jpa-exercises/tree/master/hello-jpa-repository)
+* [User Service](https://github.com/bobocode-projects/spring-data-jpa-exercises/tree/master/user-service)
