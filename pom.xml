@@ -11,6 +11,7 @@
         <module>spring-data-jpa-exercises-model</module>
         <module>spring-data-jpa-exercises-util</module>
         <module>hello-jpa-repository</module>
+        <module>user-service</module>
     </modules>
 
     <packaging>pom</packaging>

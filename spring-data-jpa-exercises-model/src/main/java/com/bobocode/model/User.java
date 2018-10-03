@@ -36,7 +36,6 @@ public class User {
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Address address;
 
