@@ -119,6 +119,8 @@ public class UserServiceAppTest {
     public void testFindUsersByCity() {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
         userRepository.saveAll(userList);
+        entityManager.flush();
+        userList.forEach(entityManager::detach);
 
         String city = userList.get(0).getAddress().getCity();
         List<User> cityUsers = userService.findByCity(city);
@@ -139,6 +141,8 @@ public class UserServiceAppTest {
     public void testGetUserByEmail() {
         User generatedUser = dataGenerator.generateUser();
         userRepository.save(generatedUser);
+        entityManager.flush();
+        entityManager.detach(generatedUser);
 
         User foundUser = userService.getByEmail(generatedUser.getEmail());
 
