@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>Hello JpaRepository exercise :muscle:
+# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>User Service exercise :muscle:
 Improve your *Spring Data JPA* Java configuration skills
 ### Task
 The task is to **implement `UserService` using `UserRepository`**. In order to do that, you need to **provide all required 
