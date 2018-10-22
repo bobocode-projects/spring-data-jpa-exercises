@@ -21,7 +21,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
 
     @Override
     public void addRoleToAllUsers(RoleType roleType) {
-        List<User> users = entityManager.createQuery("select u from User u join fetch u.roles", User.class)
+        List<User> users = entityManager.createQuery("select u from User u left join fetch u.roles", User.class)
                 .getResultList();
         users.stream()
                 .filter(user -> hasNoRole(user, roleType))
