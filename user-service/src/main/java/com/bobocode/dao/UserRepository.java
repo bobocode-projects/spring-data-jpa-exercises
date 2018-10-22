@@ -21,6 +21,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long>, CustomUserRepository {
     List<User> findAllByAddressCity(String city);
 
-    @Query("select u from User u join fetch u.address join fetch u.roles where u.email = :email")
+    @Query("select u from User u left join fetch u.address left join fetch u.roles where u.email = :email")
     Optional<User> findByEmailFetchRoles(@Param("email") String email);
 }
