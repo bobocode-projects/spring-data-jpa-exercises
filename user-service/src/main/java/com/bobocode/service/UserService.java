@@ -15,7 +15,7 @@ import java.util.List;
  * todo: 1. Implement {@link UserService#findByCity(String)} using {@link UserRepository}, make method read only
  * todo: 2. Implement {@link UserService#getByEmail(String)} using {@link UserRepository}, make method read only
  * todo: 3. In case user is not found by email, throw {@link EntityNotFoundException} with message "Cannot find user by email ${email}"
- * todo: 4. Implement {@link UserService#addRoleToAllUser(RoleType)} using {@link UserRepository}
+ * todo: 4. Implement {@link UserService#addRoleToAllUsers(RoleType)} using {@link UserRepository}
  */
 public class UserService {
     public List<User> findByCity(String city) {
@@ -26,7 +26,7 @@ public class UserService {
         throw new UnsupportedOperationException("Do your best and implement this method!");
     }
 
-    public void addRoleToAllUser(RoleType roleType) {
+    public void addRoleToAllUsers(RoleType roleType) {
         throw new UnsupportedOperationException("Do your best and implement this method!");
     }
 }
