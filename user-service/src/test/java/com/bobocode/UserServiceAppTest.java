@@ -4,7 +4,6 @@ import com.bobocode.config.JpaConfig;
 import com.bobocode.config.RootConfig;
 import com.bobocode.dao.UserRepository;
 import com.bobocode.exception.EntityNotFoundException;
-import com.bobocode.model.Role;
 import com.bobocode.model.RoleType;
 import com.bobocode.model.User;
 import com.bobocode.service.UserService;
@@ -26,7 +25,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -197,7 +195,7 @@ public class UserServiceAppTest {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
         userRepository.saveAll(userList);
 
-        userService.addRoleToAllUser(RoleType.OPERATOR);
+        userService.addRoleToAllUsers(RoleType.OPERATOR);
         entityManager.flush();
         userList.forEach(entityManager::detach);
 
@@ -212,7 +210,7 @@ public class UserServiceAppTest {
         User user = dataGenerator.generateUser(RoleType.USER, RoleType.OPERATOR);
         userRepository.save(user);
 
-        userService.addRoleToAllUser(RoleType.OPERATOR);
+        userService.addRoleToAllUsers(RoleType.OPERATOR);
 
         entityManager.flush();
         entityManager.detach(user);

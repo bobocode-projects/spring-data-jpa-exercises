@@ -17,7 +17,7 @@ import java.util.List;
  * todo: 1. Implement {@link UserService#findByCity(String)} using {@link UserRepository}, make method read only
  * todo: 2. Implement {@link UserService#getByEmail(String)} using {@link UserRepository}, make method read only
  * todo: 3. In case user is not found by email, throw {@link EntityNotFoundException} with message "Cannot find user by email ${email}"
- * todo: 4. Implement {@link UserService#addRoleToAllUser(RoleType)} using {@link UserRepository}
+ * todo: 4. Implement {@link UserService#addRoleToAllUsers(RoleType)} using {@link UserRepository}
  */
 @Transactional
 @Service
@@ -39,7 +39,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cannot find user by email %s", email)));
     }
 
-    public void addRoleToAllUser(RoleType roleType) {
+    public void addRoleToAllUsers(RoleType roleType) {
         userRepository.addRoleToAllUsers(roleType);
     }
 }
