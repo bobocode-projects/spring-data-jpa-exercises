@@ -193,6 +193,9 @@ public class UserServiceAppTest {
     @Test
     public void testAddRoleToAllUsers() {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
+        User userWithoutRoles = dataGenerator.generateUserWithoutRoles();
+        userList.add(userWithoutRoles);
+
         userRepository.saveAll(userList);
 
         userService.addRoleToAllUsers(RoleType.OPERATOR);

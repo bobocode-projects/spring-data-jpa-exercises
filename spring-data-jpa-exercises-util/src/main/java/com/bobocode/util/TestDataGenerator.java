@@ -38,7 +38,7 @@ public class TestDataGenerator {
         return user;
     }
 
-    private User generateUserWithoutRoles() {
+    public User generateUserWithoutRoles() {
         Fairy fairy = Fairy.create();
         Person person = fairy.person();
 
