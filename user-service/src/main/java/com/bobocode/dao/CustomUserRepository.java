@@ -12,6 +12,7 @@ import com.bobocode.model.RoleType;
  * todo: 3. Mark that class {@link org.springframework.transaction.annotation.Transactional}
  * todo: 4. Implement method {@link CustomUserRepository#addRoleToAllUsers(RoleType)}
  */
+
 public interface CustomUserRepository {
     void addRoleToAllUsers(RoleType roleType);
 }
