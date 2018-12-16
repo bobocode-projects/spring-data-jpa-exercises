@@ -109,9 +109,10 @@ public class UserServiceAppTest {
             basePackages = enableJpaRepositories.value();
         }
 
-
         assertThat(basePackages, array(equalTo("com.bobocode.dao")));
     }
+
+
 
     @Test
     public void testFindUsersByCity() {
@@ -160,6 +161,18 @@ public class UserServiceAppTest {
     }
 
     @Test
+    public void testGetUserByEmailForUserWithoutRoles() {
+        User generatedUserWithoutRoles = dataGenerator.generateUserWithoutRoles();
+        userRepository.save(generatedUserWithoutRoles);
+        entityManager.flush();
+        entityManager.detach(generatedUserWithoutRoles);
+
+        User foundUser = userService.getByEmail(generatedUserWithoutRoles.getEmail());
+
+        assertThat(foundUser, notNullValue());
+    }
+
+    @Test
     public void testGetUserByEmailFetchesAddress() {
         User generatedUser = dataGenerator.generateUser();
         userRepository.save(generatedUser);
@@ -169,6 +182,19 @@ public class UserServiceAppTest {
         User foundUser = userService.getByEmail(generatedUser.getEmail());
 
         assertTrue(Persistence.getPersistenceUtil().isLoaded(foundUser, "address"));
+    }
+
+    @Test
+    public void testGetUserByEmailForUserWithoutAddress() {
+        User generatedUserWithoutAddress = dataGenerator.generateUser();
+        generatedUserWithoutAddress.setAddress(null);
+        userRepository.save(generatedUserWithoutAddress);
+        entityManager.flush();
+        entityManager.detach(generatedUserWithoutAddress);
+
+        User foundUser = userService.getByEmail(generatedUserWithoutAddress.getEmail());
+
+        assertThat(foundUser, notNullValue());
     }
 
     @Test
@@ -192,6 +218,21 @@ public class UserServiceAppTest {
 
     @Test
     public void testAddRoleToAllUsers() {
+        List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
+        userRepository.saveAll(userList);
+
+        userService.addRoleToAllUsers(RoleType.OPERATOR);
+        entityManager.flush();
+        userList.forEach(entityManager::detach);
+
+        List<User> users = userRepository.findAll();
+
+        assertThat(users, everyItem(hasProperty("roles",
+                hasItem(hasProperty("roleType", is(RoleType.OPERATOR))))));
+    }
+
+    @Test
+    public void testAddRoleToAllUsersIncludingUsersWithoutRoles() {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
         User userWithoutRoles = dataGenerator.generateUserWithoutRoles();
         userList.add(userWithoutRoles);
