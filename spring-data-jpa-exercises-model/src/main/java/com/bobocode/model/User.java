@@ -36,7 +36,7 @@ public class User {
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
 
     @Setter(AccessLevel.PRIVATE)
@@ -44,7 +44,11 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     public void setAddress(Address address) {
-        address.setUser(this);
+        if (address != null) {
+            address.setUser(this);
+        } else if (this.address != null) {
+            this.address.setUser(null);
+        }
         this.address = address;
     }
 
