@@ -45,8 +45,7 @@ public class Role {
         if (!(o instanceof Role)) return false;
 
         Role role = (Role) o;
-
-        return Objects.equals(id, role.id);
+        return id != null && id.equals(role.id);
     }
 
     @Override
