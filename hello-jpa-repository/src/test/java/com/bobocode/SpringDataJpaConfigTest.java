@@ -18,17 +18,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
-
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.array;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 @SpringJUnitConfig(RootConfig.class)
 @Transactional
-public class SpringDataJpaConfigTest {
+class SpringDataJpaConfigTest {
     @Configuration
     static class TestConfig {
         @Bean
@@ -47,35 +49,35 @@ public class SpringDataJpaConfigTest {
     private TestDataGenerator dataGenerator;
 
     @Test
-    public void testTxManagerBeanName() {
+    void testTxManagerBeanName() {
         PlatformTransactionManager transactionManager = applicationContext.getBean(PlatformTransactionManager.class, "transactionManager");
 
         assertThat(transactionManager, notNullValue());
     }
 
     @Test
-    public void testUserRepositoryBeanName() {
+    void testUserRepositoryBeanName() {
         UserRepository userRepository = applicationContext.getBean(UserRepository.class, "userRepository");
 
         assertThat(userRepository, notNullValue());
     }
 
     @Test
-    public void testEntityManagerFactoryBeanName() {
+    void testEntityManagerFactoryBeanName() {
         EntityManagerFactory entityManagerFactory = applicationContext.getBean(EntityManagerFactory.class, "entityManagerFactory");
 
         assertThat(entityManagerFactory, notNullValue());
     }
 
     @Test
-    public void testUserRepositoryIsNotMarkedAsRepository() {
+    void testUserRepositoryIsNotMarkedAsRepository() {
         Repository repository = UserRepository.class.getAnnotation(Repository.class);
 
         assertThat(repository, nullValue());
     }
 
     @Test
-    public void testRootConfigComponentScan() {
+    void testRootConfigComponentScan() {
         ComponentScan componentScan = RootConfig.class.getAnnotation(ComponentScan.class);
 
         String[] basePackages = componentScan.basePackages();
@@ -87,14 +89,14 @@ public class SpringDataJpaConfigTest {
     }
 
     @Test
-    public void testJpaConfigRepositoriesPackage() {
+    void testJpaConfigRepositoriesPackage() {
         EnableJpaRepositories enableJpaRepositories = JpaConfig.class.getAnnotation(EnableJpaRepositories.class);
 
         assertThat(enableJpaRepositories.basePackages(), array(equalTo("com.bobocode.dao")));
     }
 
     @Test
-    public void testSaveUser() {
+    void testSaveUser() {
         User user = dataGenerator.generateUser();
 
         userRepository.save(user);
@@ -103,7 +105,7 @@ public class SpringDataJpaConfigTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         Stream.generate(dataGenerator::generateUser).limit(10).forEach(userRepository::save);
 
         List<User> users = userRepository.findAll();
