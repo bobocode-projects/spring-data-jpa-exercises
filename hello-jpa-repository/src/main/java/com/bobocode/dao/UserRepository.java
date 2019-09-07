@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * <p>
  * todo: 1. Configure {@link UserRepository} as {@link JpaRepository} for class User
  */
-public interface UserRepository extends JpaRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 }
