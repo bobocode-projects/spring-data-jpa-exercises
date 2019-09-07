@@ -29,14 +29,22 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.array;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringJUnitConfig(RootConfig.class)
 @Transactional
-public class UserServiceAppTest {
+class UserServiceAppTest {
     @Configuration
     static class TestConfig {
         @Bean
@@ -61,35 +69,35 @@ public class UserServiceAppTest {
     private EntityManager entityManager;
 
     @Test
-    public void testTxManagerBeanName() {
+    void testTxManagerBeanName() {
         PlatformTransactionManager transactionManager = applicationContext.getBean(PlatformTransactionManager.class, "transactionManager");
 
         assertThat(transactionManager, notNullValue());
     }
 
     @Test
-    public void testUserRepositoryBeanName() {
+    void testUserRepositoryBeanName() {
         UserRepository userRepository = applicationContext.getBean(UserRepository.class, "userRepository");
 
         assertThat(userRepository, notNullValue());
     }
 
     @Test
-    public void testEntityManagerFactoryBeanName() {
+    void testEntityManagerFactoryBeanName() {
         EntityManagerFactory entityManagerFactory = applicationContext.getBean(EntityManagerFactory.class, "entityManagerFactory");
 
         assertThat(entityManagerFactory, notNullValue());
     }
 
     @Test
-    public void testUserRepositoryIsNotMarkedAsRepository() {
+    void testUserRepositoryIsNotMarkedAsRepository() {
         Repository repository = UserRepository.class.getAnnotation(Repository.class);
 
         assertThat(repository, nullValue());
     }
 
     @Test
-    public void testRootConfigComponentScan() {
+    void testRootConfigComponentScan() {
         ComponentScan componentScan = RootConfig.class.getAnnotation(ComponentScan.class);
 
         String[] basePackages = componentScan.basePackages();
@@ -101,7 +109,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testJpaConfigRepositoriesPackage() {
+    void testJpaConfigRepositoriesPackage() {
         EnableJpaRepositories enableJpaRepositories = JpaConfig.class.getAnnotation(EnableJpaRepositories.class);
 
         String[] basePackages = enableJpaRepositories.basePackages();
@@ -113,9 +121,8 @@ public class UserServiceAppTest {
     }
 
 
-
     @Test
-    public void testFindUsersByCity() {
+    void testFindUsersByCity() {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
         userRepository.saveAll(userList);
         entityManager.flush();
@@ -129,7 +136,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testFindUsersByCityIsReadOnly() throws NoSuchMethodException {
+    void testFindUsersByCityIsReadOnly() throws NoSuchMethodException {
         Transactional transactional = UserService.class.getMethod("findByCity", String.class)
                 .getAnnotation(Transactional.class);
 
@@ -137,7 +144,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetUserByEmail() {
+    void testGetUserByEmail() {
         User generatedUser = dataGenerator.generateUser();
         userRepository.save(generatedUser);
         entityManager.flush();
@@ -149,7 +156,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetUserByEmailFetchesRoles() {
+    void testGetUserByEmailFetchesRoles() {
         User generatedUser = dataGenerator.generateUser();
         userRepository.save(generatedUser);
         entityManager.flush();
@@ -161,7 +168,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetUserByEmailForUserWithoutRoles() {
+    void testGetUserByEmailForUserWithoutRoles() {
         User generatedUserWithoutRoles = dataGenerator.generateUserWithoutRoles();
         userRepository.save(generatedUserWithoutRoles);
         entityManager.flush();
@@ -173,7 +180,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetUserByEmailFetchesAddress() {
+    void testGetUserByEmailFetchesAddress() {
         User generatedUser = dataGenerator.generateUser();
         userRepository.save(generatedUser);
         entityManager.flush();
@@ -185,7 +192,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetUserByEmailForUserWithoutAddress() {
+    void testGetUserByEmailForUserWithoutAddress() {
         User generatedUserWithoutAddress = dataGenerator.generateUser();
         generatedUserWithoutAddress.setAddress(null);
         userRepository.save(generatedUserWithoutAddress);
@@ -198,7 +205,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetByEmailIsReadOnly() throws NoSuchMethodException {
+    void testGetByEmailIsReadOnly() throws NoSuchMethodException {
         Transactional transactional = UserService.class.getMethod("getByEmail", String.class)
                 .getAnnotation(Transactional.class);
 
@@ -206,7 +213,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testGetUserByNotExistingEmail() {
+    void testGetUserByNotExistingEmail() {
         try {
             User foundUser = userService.getByEmail("xxx@gmail.com");
             fail("Exception should be thrown");
@@ -217,7 +224,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testAddRoleToAllUsers() {
+    void testAddRoleToAllUsers() {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
         userRepository.saveAll(userList);
 
@@ -232,7 +239,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testAddRoleToAllUsersIncludingUsersWithoutRoles() {
+    void testAddRoleToAllUsersIncludingUsersWithoutRoles() {
         List<User> userList = Stream.generate(dataGenerator::generateUser).limit(10).collect(toList());
         User userWithoutRoles = dataGenerator.generateUserWithoutRoles();
         userList.add(userWithoutRoles);
@@ -250,7 +257,7 @@ public class UserServiceAppTest {
     }
 
     @Test
-    public void testAddRoleToAllUsersDoesntAddDuplicates() {
+    void testAddRoleToAllUsersDoesntAddDuplicates() {
         User user = dataGenerator.generateUser(RoleType.USER, RoleType.OPERATOR);
         userRepository.save(user);
 
